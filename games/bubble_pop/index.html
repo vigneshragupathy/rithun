@@ -231,8 +231,8 @@
         let level = 1;
         let gameActive = false;
         let bubbleCount = 0;
-        let maxBubbles = 3;
-        let bubbleSpeed = 3000;
+        let maxBubbles = 5;  // Increased from 3 to 5 initial bubbles
+        let bubbleSpeed = 2000;  // Reduced from 3000 to 2000ms
 
         const colors = [
             '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7',
@@ -253,8 +253,8 @@
             score = 0;
             level = 1;
             bubbleCount = 0;
-            maxBubbles = 3;
-            bubbleSpeed = 3000;
+            maxBubbles = 5;
+            bubbleSpeed = 2000;
             updateDisplay();
             createBackgroundBubbles();
             startBubbleGeneration();
@@ -322,8 +322,8 @@
             
             if (score > level * 100) {
                 level++;
-                maxBubbles = Math.min(maxBubbles + 1, 8);
-                bubbleSpeed = Math.max(bubbleSpeed - 200, 1000);
+                maxBubbles = Math.min(maxBubbles + 2, 12);  // Increased max limit and increment
+                bubbleSpeed = Math.max(bubbleSpeed - 300, 800);  // Faster speed reduction and lower minimum
                 updateDisplay();
                 showLevelUp();
             }
