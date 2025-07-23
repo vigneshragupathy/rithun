@@ -62,19 +62,6 @@
         letter-spacing: 2px;
     }
 
-    .age-counter {
-        text-align: center;
-        font-size: 24px;
-        color: #fff;
-        margin-bottom: 40px;
-        text-shadow: 2px 2px 0 #4169E1;
-        background: rgba(255, 255, 255, 0.2);
-        padding: 15px;
-        border-radius: 20px;
-        backdrop-filter: blur(5px);
-        display: inline-block;
-    }
-
     .sections-container {
         display: flex;
         flex-direction: row;
@@ -190,16 +177,6 @@
         font-size: clamp(14px, 3vw, 16px);
         text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
     }
-
-    .profile-image {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        margin: 20px auto;
-        display: block;
-        border: 5px solid white;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
 </style>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-167979893-1"></script>
@@ -214,21 +191,19 @@
 <body>
     <div class="header">
         <h1>Welcome to Rithun's Creative Corner! 🎨</h1>
-        <img src="rithun_birthday.jpg" class="profile-image" alt="Rithun's Photo">
-        <div class="age-counter" id="demo"></div>
     </div>
 
     <div class="sections-container">
         <div class="section">
-            <h2>🎮 My Games</h2>
+            <h2>🎮 🏆 🚀 Game Zone</h2>
             <div class="content-grid">
                 <div class="card" onclick="window.location.href='games/bubble_pop/index.html'">
-                    <img src="games/bubble_pop/bubble-preview.png" alt="Bubble Pop Game" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect width=%22200%22 height=%22200%22 fill=%22%23f0f0f0%22/><text x=%22100%22 y=%22100%22 font-family=%22Arial%22 font-size=%2220%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>Bubble Pop</text></svg>'">
+                    <img src="games/bubble_pop/bubble-preview.png" alt="Bubble Pop Game" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect width=%22200%22 height=%22200%22 fill=%22%23FFB6C1%22/><circle cx=%2250%22 cy=%2250%22 r=%2220%22 fill=%22%23FF69B4%22/><circle cx=%22150%22 cy=%2270%22 r=%2225%22 fill=%22%2387CEEB%22/><circle cx=%22100%22 cy=%22130%22 r=%2230%22 fill=%22%23FFD700%22/><text x=%22100%22 y=%2230%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22white%22 text-anchor=%22middle%22>Pop the Bubbles!</text></svg>'">
                     <h3>Bubble Pop Adventure</h3>
                     <p>Pop colorful bubbles in this fun and engaging game!</p>
                 </div>
                 <div class="card" onclick="window.location.href='games/speed_racer/index.html'">
-                    <img src="games/speed_racer/preview.png" alt="Speed Racer Game" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect width=%22200%22 height=%22200%22 fill=%22%23f0f0f0%22/><text x=%22100%22 y=%22100%22 font-family=%22Arial%22 font-size=%2220%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>Speed Racer</text></svg>'">
+                    <img src="games/speed_racer/preview.png" alt="Speed Racer Game" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect width=%22200%22 height=%22200%22 fill=%22%23333%22/><rect x=%2220%22 y=%2250%22 width=%22160%22 height=%22100%22 fill=%22%23666%22/><rect x=%2270%22 y=%22120%22 width=%2240%22 height=%2220%22 fill=%22%23FF0000%22/><circle cx=%2280%22 cy=%22140%22 r=%228%22 fill=%22%23000%22/><circle cx=%22100%22 cy=%22140%22 r=%228%22 fill=%22%23000%22/><text x=%22100%22 y=%2230%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22white%22 text-anchor=%22middle%22>Race to Win!</text></svg>'">
                     <h3>Speed Racer</h3>
                     <p>Race through traffic and become the ultimate speed racer! How long can you survive?</p>
                 </div>
@@ -237,7 +212,7 @@
         </div>
 
         <div class="section">
-            <h2>📚 My Stories</h2>
+            <h2>📚 ✨ 🌟 Story World</h2>
             <div class="content-grid">
                 <!-- Stories will be added here -->
                 <div class="card">
@@ -248,38 +223,6 @@
         </div>
     </div>
 
-<script>
-// Set the date we're counting down to
-var countDownDate = new Date("Dec 14, 2017 04:14:00").getTime();
 
-// Update the count down every 1 second
-var x = setInterval(function() {
-
-    // Get todays date and time
-    var now = new Date().getTime();
-    
-    // Find the distance between now and the count down date
-    var distance1 = now - countDownDate;
-    var distance = countDownDate + now;
-    
-    // Time calculations for days, hours, minutes and seconds
-    //var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-	var years = Math.floor(distance1 / (1000 * 60 * 60 * 24)/365);
-    var days1 = Math.floor((distance1 / (1000 * 60 * 60 * 24)) % 365);
-    var hours = Math.floor((distance1 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance1 % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance1 % (1000 * 60)) / 1000);
-    
-    // Output the result in an element with id="demo"
-    document.getElementById("demo").innerHTML = "I am " + years + " years, " + days1 + " days, "
-        + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds old!";
-    
-    // If the count down is over, write some text 
-    if (distance < 0) {
-        clearInterval(x);
-        document.getElementById("demo").innerHTML = "Error calculating age!";
-    }
-}, 1000);
-</script>
 </body>
 </html>
