@@ -39,16 +39,96 @@
         @media (max-width: 768px) {
             .game-container {
                 height: 100vh;
+                width: 100vw;
                 margin: 0;
                 border-radius: 0;
+                border: none;
             }
 
             .start-screen h1 {
-                font-size: 36px !important;
+                font-size: 32px !important;
+                padding: 0 10px;
+            }
+
+            .start-screen p {
+                font-size: 16px !important;
+                padding: 0 15px;
             }
 
             .controls {
                 font-size: 14px !important;
+                padding: 10px;
+                margin: 10px;
+            }
+
+            .game-ui {
+                font-size: 16px;
+                padding: 8px 12px;
+                flex-wrap: wrap;
+                gap: 5px;
+                justify-content: center;
+            }
+
+            .game-ui div {
+                margin: 0 5px;
+            }
+
+            .exit-button {
+                font-size: 16px;
+                padding: 5px 15px;
+            }
+
+            /* Mobile touch controls */
+            .mobile-controls {
+                display: flex;
+                position: fixed;
+                bottom: 20px;
+                left: 0;
+                right: 0;
+                justify-content: center;
+                gap: 40px;
+                z-index: 1000;
+                padding: 10px;
+            }
+
+            .control-btn {
+                width: 60px;
+                height: 60px;
+                background: rgba(255, 255, 255, 0.3);
+                border: 2px solid white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                color: white;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .control-btn:active {
+                background: rgba(255, 255, 255, 0.5);
+                transform: scale(0.95);
+            }
+
+            /* Adjust car sizes for mobile */
+            .player-car, .obstacle-car {
+                width: 50px;
+                height: 80px;
+            }
+
+            /* Adjust game over screen for mobile */
+            .game-over h2 {
+                font-size: 32px;
+            }
+
+            .game-over p {
+                font-size: 18px;
+            }
+
+            .restart-button {
+                font-size: 20px;
+                padding: 12px 25px;
             }
         }
 
@@ -573,6 +653,13 @@
 
         <div class="player-car" id="playerCar"></div>
 
+        <div class="mobile-controls hidden" id="mobileControls">
+            <div class="control-btn" id="leftBtn">⬅️</div>
+            <div class="control-btn" id="upBtn">⬆️</div>
+            <div class="control-btn" id="downBtn">⬇️</div>
+            <div class="control-btn" id="rightBtn">➡️</div>
+        </div>
+
         <div class="game-over hidden" id="gameOver">
             <h2>� Game Over! 💫</h2>
             <p>🎮 Your Score: <span id="finalScore">0</span></p>
@@ -622,6 +709,9 @@
         let bestScore = localStorage.getItem('speedRacerBest') || 0;
         bestScoreElement.textContent = bestScore;
 
+        const mobileControls = document.getElementById('mobileControls');
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
         function startGame() {
             // Reset game state
             gameActive = true;
@@ -637,6 +727,11 @@
             coinSpawnTimer = 0;
             lastTime = 0;
             isColliding = false;
+
+            // Show mobile controls if on mobile device
+            if (isMobile) {
+                mobileControls.classList.remove('hidden');
+            }
             
             // Update UI
             startScreen.classList.add('hidden');
@@ -1011,6 +1106,7 @@
             // Clear all game elements
             document.querySelectorAll('.obstacle-car, .explosion, .speed-boost, .coin, .coin-score').forEach(el => el.remove());
             gameUI.classList.add('hidden');
+            mobileControls.classList.add('hidden');
             startScreen.classList.remove('hidden');
             obstacles = [];
             coins = [];

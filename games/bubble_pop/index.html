@@ -83,7 +83,8 @@
 
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+            50% { transform: translateY(-40px) rotate(180deg); }
+            75% { transform: translateY(-20px) rotate(270deg); }
         }
 
         @keyframes pop {
@@ -288,8 +289,12 @@
             bubble.style.left = Math.random() * (window.innerWidth - size) + 'px';
             bubble.style.top = Math.random() * (window.innerHeight - size - 100) + 50 + 'px';
             
-            bubble.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            bubble.style.animationDelay = Math.random() * 1 + 's';
+            // Animation speed decreases with level (making bubbles move faster)
+            const baseSpeed = 3; // base animation duration
+            const speedMultiplier = Math.max(0.5, 1 - (level * 0.1)); // reduces duration by 10% per level
+            const animationDuration = (Math.random() * 1 + baseSpeed) * speedMultiplier;
+            bubble.style.animationDuration = animationDuration + 's';
+            bubble.style.animationDelay = Math.random() * 0.5 + 's';
             
             bubble.addEventListener('click', () => popBubble(bubble, size));
             
