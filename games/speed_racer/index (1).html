@@ -23,12 +23,61 @@
 
         .game-container {
             position: relative;
-            width: 800px;
-            height: 600px;
+            width: min(800px, 95vw);
+            height: min(600px, 80vh);
             background: #333;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mobile touch controls */
+        .mobile-controls {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 100%;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .control-btn:active {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-controls {
+                display: flex;
+            }
+            .controls div {
+                font-size: 14px;
+                margin: 5px 0;
+            }
+            .start-screen h1 {
+                font-size: 32px;
+            }
+            .start-screen p {
+                font-size: 16px;
+                padding: 0 20px;
+            }
         }
 
         .road {
@@ -350,6 +399,13 @@
 
         <div class="player-car" id="playerCar"></div>
 
+        <div class="mobile-controls">
+            <div class="control-btn" id="leftBtn">⬅️</div>
+            <div class="control-btn" id="upBtn">⬆️</div>
+            <div class="control-btn" id="downBtn">⬇️</div>
+            <div class="control-btn" id="rightBtn">➡️</div>
+        </div>
+
         <div class="game-over hidden" id="gameOver">
             <h2>💥 Game Over!</h2>
             <p>Your Score: <span id="finalScore">0</span></p>
@@ -641,6 +697,47 @@
             if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
                 e.preventDefault();
             }
+        });
+
+        // Touch controls
+        const touchButtons = {
+            leftBtn: 'ArrowLeft',
+            rightBtn: 'ArrowRight',
+            upBtn: 'ArrowUp',
+            downBtn: 'ArrowDown'
+        };
+
+        // Handle touch events for mobile controls
+        Object.keys(touchButtons).forEach(btnId => {
+            const btn = document.getElementById(btnId);
+            if (btn) {
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    keys[touchButtons[btnId]] = true;
+                });
+
+                btn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    keys[touchButtons[btnId]] = false;
+                });
+
+                // Prevent default touch behavior to avoid scrolling
+                btn.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                });
+            }
+        });
+
+        // Disable zoom on double tap
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Prevent pinch zoom
+        document.addEventListener('gesturestart', (e) => {
+            e.preventDefault();
         });
     </script>
 </body>
