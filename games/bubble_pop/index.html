@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Pop Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(45deg, #89f7fe 0%, #66a6ff 100%);
+            overflow: hidden;
+        }
+
+        .game-header {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a4a4a;
+            margin-bottom: 5px;
+        }
+
+        .level {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), transparent 50%);
+        }
+
+        .bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .bubble::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 25%;
+            width: 30%;
+            height: 30%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+            border-radius: 50%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .popping {
+            animation: pop 0.3s ease-out forwards;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particle-explosion 0.8s ease-out forwards;
+        }
+
+        @keyframes particle-explosion {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) translate(var(--dx), var(--dy));
+            }
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            color: white;
+            text-align: center;
+        }
+
+        .start-screen h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-screen p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .start-button {
+            padding: 15px 40px;
+            font-size: 24px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .celebration {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: celebrate 1s ease-out;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        @keyframes celebrate {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        .background-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float-background 8s ease-in-out infinite;
+        }
+
+        @keyframes float-background {
+            0%, 100% { transform: translateY(0px); opacity: 0.1; }
+            50% { transform: translateY(-50px); opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="start-screen" id="startScreen">
+            <h1>🫧 Bubble Pop Adventure 🫧</h1>
+            <p>Welcome to the most delightful bubble popping game! Click on the colorful bubbles to pop them and earn points. The bigger the bubble, the more points you get!</p>
+            <p>Perfect for all ages - from toddlers to grandparents!</p>
+            <button class="start-button" onclick="startGame()">Start Popping! 🎉</button>
+        </div>
+
+        <div class="game-header hidden" id="gameHeader">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="level">Level: <span id="level">1</span></div>
+        </div>
+
+        <div class="background-bubbles" id="backgroundBubbles"></div>
+    </div>
+
+    <script>
+        let score = 0;
+        let level = 1;
+        let gameActive = false;
+        let bubbleCount = 0;
+        let maxBubbles = 3;
+        let bubbleSpeed = 3000;
+
+        const colors = [
+            '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7',
+            '#dda0dd', '#98d8c8', '#f7dc6f', '#bb8fce', '#85c1e9'
+        ];
+
+        const gameContainer = document.querySelector('.game-container');
+        const startScreen = document.getElementById('startScreen');
+        const gameHeader = document.getElementById('gameHeader');
+        const scoreElement = document.getElementById('score');
+        const levelElement = document.getElementById('level');
+        const backgroundBubbles = document.getElementById('backgroundBubbles');
+
+        function startGame() {
+            startScreen.classList.add('hidden');
+            gameHeader.classList.remove('hidden');
+            gameActive = true;
+            score = 0;
+            level = 1;
+            bubbleCount = 0;
+            maxBubbles = 3;
+            bubbleSpeed = 3000;
+            updateDisplay();
+            createBackgroundBubbles();
+            startBubbleGeneration();
+        }
+
+        function createBackgroundBubbles() {
+            for (let i = 0; i < 15; i++) {
+                const bgBubble = document.createElement('div');
+                bgBubble.className = 'bg-bubble';
+                bgBubble.style.left = Math.random() * 100 + '%';
+                bgBubble.style.top = Math.random() * 100 + '%';
+                bgBubble.style.width = bgBubble.style.height = (Math.random() * 60 + 20) + 'px';
+                bgBubble.style.animationDelay = Math.random() * 8 + 's';
+                backgroundBubbles.appendChild(bgBubble);
+            }
+        }
+
+        function createBubble() {
+            if (!gameActive || bubbleCount >= maxBubbles) return;
+
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            
+            const size = Math.random() * 80 + 40;
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            bubble.style.background = `radial-gradient(circle at 30% 30%, ${color}, ${color}dd)`;
+            
+            bubble.style.left = Math.random() * (window.innerWidth - size) + 'px';
+            bubble.style.top = Math.random() * (window.innerHeight - size - 100) + 50 + 'px';
+            
+            bubble.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            bubble.style.animationDelay = Math.random() * 1 + 's';
+            
+            bubble.addEventListener('click', () => popBubble(bubble, size));
+            
+            gameContainer.appendChild(bubble);
+            bubbleCount++;
+            
+            setTimeout(() => {
+                if (bubble.parentNode && !bubble.classList.contains('popping')) {
+                    bubble.remove();
+                    bubbleCount--;
+                }
+            }, 8000);
+        }
+
+        function popBubble(bubble, size) {
+            if (bubble.classList.contains('popping')) return;
+            
+            bubble.classList.add('popping');
+            const points = Math.floor(size / 10);
+            score += points;
+            updateDisplay();
+            
+            createParticles(bubble);
+            showCelebration(bubble, points);
+            
+            setTimeout(() => {
+                bubble.remove();
+                bubbleCount--;
+            }, 300);
+            
+            if (score > level * 100) {
+                level++;
+                maxBubbles = Math.min(maxBubbles + 1, 8);
+                bubbleSpeed = Math.max(bubbleSpeed - 200, 1000);
+                updateDisplay();
+                showLevelUp();
+            }
+        }
+
+        function createParticles(bubble) {
+            const rect = bubble.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                particle.style.background = bubble.style.background;
+                
+                const angle = (i / 8) * Math.PI * 2;
+                const distance = Math.random() * 100 + 50;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--dx', dx + 'px');
+                particle.style.setProperty('--dy', dy + 'px');
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 800);
+            }
+        }
+
+        function showCelebration(bubble, points) {
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            celebration.textContent = `+${points}`;
+            celebration.style.left = bubble.style.left;
+            celebration.style.top = bubble.style.top;
+            gameContainer.appendChild(celebration);
+            
+            setTimeout(() => celebration.remove(), 1000);
+        }
+
+        function showLevelUp() {
+            const levelUp = document.createElement('div');
+            levelUp.className = 'celebration';
+            levelUp.textContent = `Level Up! 🎉`;
+            levelUp.style.fontSize = '48px';
+            gameContainer.appendChild(levelUp);
+            
+            setTimeout(() => levelUp.remove(), 2000);
+        }
+
+        function updateDisplay() {
+            scoreElement.textContent = score;
+            levelElement.textContent = level;
+        }
+
+        function startBubbleGeneration() {
+            if (!gameActive) return;
+            
+            createBubble();
+            setTimeout(startBubbleGeneration, bubbleSpeed + Math.random() * 1000);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const bubbles = document.querySelectorAll('.bubble');
+            bubbles.forEach(bubble => {
+                const rect = bubble.getBoundingClientRect();
+                if (rect.right > window.innerWidth) {
+                    bubble.style.left = (window.innerWidth - rect.width) + 'px';
+                }
+                if (rect.bottom > window.innerHeight) {
+                    bubble.style.top = (window.innerHeight - rect.height) + 'px';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
